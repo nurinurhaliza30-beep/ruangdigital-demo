@@ -1,6 +1,6 @@
 /* Konfigurasi toko. Isi URL produk Lynk setelah produk dibuat di akunmu. */
 window.STORE_CONFIG = {
-  // PDF besar disimpan di Google Drive (bukan di Netlify). Isi dengan FILE ID atau link unduhan penuh.
+  // Opsional: arahkan produk ke Google Drive milikmu. Isi dengan FILE ID atau link Drive lengkap; kosongkan untuk memakai file di folder assets.
   // Contoh: dari link https://drive.google.com/file/d/1AbCdEfG/view  ->  isi "1AbCdEfG"
   externalFiles: {
     "assets/worksheet-campuran.pdf": "",
@@ -10,11 +10,5 @@ window.STORE_CONFIG = {
   brand: "RuangDigital",
   supportWhatsApp: "", // format internasional tanpa +, contoh 62812xxxxxxx
   supportEmail: "",
-  memberPriceLabel: "Lihat harga di Lynk.id",
-  memberCheckoutUrl: "",
-  checkoutUrls: {
-    "Waktu Sholat": "", "Amalan Rezeki": "", "Doa Harian": "",
-    "Worksheet": "", "Worksheet Mewarnai Benda": "", "Flash Card": "",
-    "Game Edukasi": ""
-  }
+  checkoutUrls: {}
 };

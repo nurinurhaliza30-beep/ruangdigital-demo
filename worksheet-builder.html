@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Worksheet Builder Toddler</title>
+<style>
+:root{--bg:#ffffff;--card:#ffffff;--tx:#12303f;--mu:#5b7686;--ac:#1e88e5;--ac2:#e3f2fd;--bd:#dcebf2;--gr:#2eb872;--gr2:#e2f7ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1b24;--card:#152733;--tx:#eaf5fa;--mu:#8fb0c0;--ac:#4aa8f5;--ac2:#1c3a4f;--bd:#27445a;--gr:#43d08a;--gr2:#173d30}}
+:root[data-theme="dark"]{--bg:#0e1b24;--card:#152733;--tx:#eaf5fa;--mu:#8fb0c0;--ac:#4aa8f5;--ac2:#1c3a4f;--bd:#27445a;--gr:#43d08a;--gr2:#173d30}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+.w{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.6rem;margin:0 0 4px}
+.sub{color:var(--mu);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:16px}
+h2{font-size:1.05rem;margin:0 0 12px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{display:block;font-size:.85rem;color:var(--mu);margin-bottom:4px}
+input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit}
+.acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.act{border:1.5px solid var(--bd);border-radius:10px;padding:10px;cursor:pointer;background:var(--bg);text-align:left;color:var(--tx);font:inherit;font-size:.9rem}
+.act.on{border-color:var(--gr);background:var(--gr2);font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tab{padding:6px 12px;border-radius:99px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:.85rem;cursor:pointer}
+.tab.on{background:var(--gr);color:#fff;border-color:var(--gr)}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;font:inherit;font-size:.9rem;max-height:420px;overflow:auto;margin:0 0 10px}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+.btn.s{background:var(--ac2);color:var(--ac)}
+.btn.g{background:var(--gr)}
+h1{color:var(--ac)}
+.card{box-shadow:0 2px 10px rgba(30,136,229,.08)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.mu{color:var(--mu);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>📝 Worksheet Builder</h1>
+<p class="sub">Worksheet toddler &amp; prasekolah: mewarnai, gunting tempel, DIY &amp; craft, coding. Pilih aktivitas, pilih tujuan (Canva atau Claude), lalu salin promptnya.</p>
+
+<div class="card"><h2>1. Info Worksheet</h2>
+<div class="g">
+<div><label>Tema</label><input id="topic" placeholder="mis. Hewan peternakan"></div>
+<div><label>Tujuan belajar</label><input id="subj" placeholder="mis. mengenal warna &amp; bentuk"></div>
+<div><label>Usia anak</label><select id="grade"><option>1-2 tahun</option><option selected>2-3 tahun</option><option>3-4 tahun</option><option>4-6 tahun (prasekolah)</option></select></div>
+<div><label>Jumlah butir per aktivitas</label><input id="n" type="number" min="1" max="12" value="4"></div>
+<div><label>Gunakan prompt untuk</label><select id="diff"><option selected>Canva AI</option><option>Claude</option><option>AI umum</option></select></div>
+<div><label>Bahasa</label><select id="lang"><option>Indonesia</option><option>Inggris</option></select></div>
+</div></div>
+
+<div class="card"><h2>2. Pilih Aktivitas <span class="mu">(bisa lebih dari satu)</span></h2>
+<div class="tabs" id="flt"></div>
+<div class="row" style="margin-bottom:10px"><button class="btn s" id="all">Pilih semua</button><button class="btn s" id="none">Kosongkan</button></div>
+<div class="acts" id="acts"></div></div>
+
+<div class="card"><h2>3. Catatan Tambahan <span class="mu">(opsional)</span></h2>
+<label>Bahan yang tersedia (untuk DIY)</label><input id="mat" placeholder="mis. kardus bekas, lem, krayon, kertas warna" style="margin-bottom:10px"><label>Catatan</label><textarea id="note" rows="2" placeholder="mis. warna dominan pastel, tanpa teks panjang"></textarea></div>
+
+<div class="card"><h2>4. Prompt Kamu</h2>
+<div class="tabs" id="tabs"></div>
+<pre id="out">Pilih minimal satu aktivitas.</pre>
+<div class="row"><button class="btn g" id="copy">Salin prompt ini</button><button class="btn s" id="goCanva">Salin &amp; buka Canva</button><button class="btn s" id="goClaude">Salin &amp; buka Claude</button><button class="btn s" id="copyall">Salin semua (gabungan)</button><button class="btn s" id="theme">Tema</button></div>
+<p class="mu" id="msg"></p></div>
+</div>
+
+<script>
+var A=[
+["Mewarnai gambar besar","satu gambar kartun besar bertema, garis luar tebal, area putih luas untuk diwarnai krayon","Gambar memenuhi 80% halaman, garis tebal hitam, tanpa detail kecil",0],
+["Cocokkan gambar","dua kolom gambar yang dijodohkan dengan garis, urutan acak","Kolom kiri dan kanan, gambar besar, jarak lebar, titik besar sebagai penghubung",0],
+["Hitung dan lingkari","gambar benda yang dihitung (angka 1-5) lalu lingkari angka yang tepat","Satu baris per butir, gambar besar, tiga angka besar sebagai pilihan",0],
+["Hubungkan titik","titik bernomor 1-10 untuk dihubungkan membentuk gambar lalu diwarnai","Titik besar dengan angka jelas, gambar sederhana dari satu garis",0],
+["Menebalkan garis","jalur garis putus-putus (lurus, zigzag, lengkung) untuk ditebalkan dengan krayon","Jalur lebar, awal dengan titik hijau, akhir dengan gambar tujuan",0],
+["Menebalkan huruf/angka","huruf atau angka besar putus-putus dengan panah arah tulis dan gambar pendamping","Huruf sangat besar, panah arah, satu huruf per kotak",0],
+["Kenali bentuk","gambar benda yang diberi bentuk dasar (lingkaran, kotak, segitiga) untuk dicari dan diwarnai","Bentuk besar dengan label, warna kontras",0],
+["Kenali warna","benda dengan keterangan warna, anak mewarnai sesuai warna yang disebut","Kotak contoh warna di samping tiap gambar",0],
+["Besar dan kecil","pasangan gambar untuk dibandingkan: lingkari yang besar, coret yang kecil","Dua gambar berdampingan dengan perbedaan ukuran jelas",0],
+["Cari yang berbeda","deretan gambar yang sama kecuali satu, anak melingkari yang berbeda","Tiga sampai empat gambar per baris, perbedaan jelas",0],
+["Gunting tempel: bentuk","kartu bentuk atau gambar di satu sisi halaman untuk digunting, lalu ditempel pada bayangan yang cocok di sisi lain","Dua zona: Gunting (bingkai garis putus-putus lebar) dan Tempel (bayangan abu-abu)",1],
+["Gunting tempel: lengkapi gambar","bagian gambar yang hilang (mis. ekor, telinga, roda) disediakan untuk digunting dan ditempel melengkapi gambar utama","Gambar utama besar tanpa bagian itu, potongan di bawah dalam kotak putus-putus",1],
+["Gunting garis lurus","garis putus-putus lurus dan zigzag pada strip kertas untuk latihan menggunting, tiap strip berakhir dengan gambar","Strip lebar dengan gunting kecil sebagai ikon awal",1],
+["Tempel dan kolase","gambar tanpa isi (mis. pohon) untuk ditempeli sobekan kertas warna, kapas, atau stiker","Garis luar besar dengan label 'tempel di sini'",1],
+["DIY topeng/boneka stik","kerajinan: topeng atau boneka stik hewan sesuai tema, siapkan pola cetak untuk digunting, diwarnai, dan ditempel pada stik es krim atau tali","Pola besar di halaman, garis gunting jelas, ikon bahan dan langkah bergambar",1],
+["DIY prakarya daur ulang","kerajinan mudah dari barang bekas (gulungan tisu, piring kertas, kardus) sesuai tema, lengkap daftar bahan dan 4 langkah bergambar","Bagian atas: daftar bahan bergambar; bawah: 4 langkah nomor besar",1],
+["DIY kartu/origami mudah","kerajinan lipat atau kartu ucapan sederhana dengan pola cetak dan langkah bergambar maksimal 4 langkah","Langkah bergambar, garis lipat putus-putus, garis gunting beda warna",1],
+["Pola sederhana","pola dua jenis (AB, ABAB) yang dilengkapi dengan gambar tempel atau diwarnai","Kotak kosong besar, tiga pola per halaman",0],
+["Labirin mudah","labirin lebar dengan satu jalur jelas dari hewan ke makanannya","Jalur lebar untuk krayon, awal dan akhir bergambar",0],
+["Hewan dan suaranya","jodohkan hewan dengan suaranya atau makanannya, bisa ditambah gunting tempel","Gambar hewan besar, kolom suara berikon",0]
+];
+function build(i){
+ var a=A[i],n=v("n")||4,t=v("topic")||"hewan",g=v("grade"),tg=v("diff"),so=v("subj"),dg=tg==="Canva AI"?"":"";
+ var safe="Aman untuk anak: tanpa bagian kecil, sudut membulat, "+(a[3]?"menggunting dan lem dengan pendampingan orang dewasa, gunakan gunting anak dan lem non-toksik.":"gunakan krayon tebal.");
+ var core="Buat worksheet A4 portrait (1 halaman) untuk anak usia "+g+". Tema: "+t+(so?". Tujuan belajar: "+so:"")+".\nAktivitas: "+a[0]+" - "+a[1]+".\nJumlah butir: "+n+".\nLayout: "+a[2]+".\n";
+ var style="Gaya: ilustrasi kartun lucu, warna pastel cerah, font bulat tebal dan besar, banyak ruang putih, teks minimal ("+v("lang")+"), judul besar di atas, kotak nama kecil di pojok.\n";
+ var mt=(A[i][4]==="c")?"Bahan utama: "+(v("mat")||"barang bekas aman di rumah (kertas, kardus, gulungan tisu)")+". Susun halaman: judul hasil karya, daftar bahan bergambar, maksimal 5 langkah bergambar bernomor besar, pola cetak untuk digunting, dan contoh hasil akhir.\n":"";
+ var no=v("note")?"Catatan: "+v("note")+".\n":"";
+ if(tg==="Canva AI")return "Worksheet A4 portrait untuk anak usia "+g+", tema "+t+": "+a[0]+". "+a[1]+". Jumlah "+n+" butir. Layout: "+a[2]+". Gaya: ilustrasi kartun lucu, warna pastel cerah, font bulat tebal besar, teks "+v("lang")+" minimal, banyak ruang putih, tepi aman untuk cetak."+(a[3]?" Beri garis gunting putus-putus berikon gunting dan area tempel yang jelas. Aman untuk anak, tanpa bagian kecil, dengan pendampingan dewasa.":"")+(mt?" "+mt.replace(/\n/g," "):"")+(v("note")?" "+v("note")+".":"");
+ if(tg==="Claude")return core+style+"Hasilkan sebagai halaman HTML siap cetak (ukuran A4, CSS @media print) dengan ilustrasi SVG sederhana buatanmu sendiri, satu file, tanpa gambar eksternal. "+safe+"\n"+no+mt+(a[3]?"Tandai garis gunting putus-putus dengan ikon gunting dan area tempel yang jelas. ":"")+"Di bawah halaman, tambahkan catatan singkat 2 kalimat untuk orang tua tentang cara mendampingi.";
+ return core+style+safe+"\n"+no+mt+"Berikan hasil berupa deskripsi tata letak per bagian dan deskripsi ilustrasi yang dibutuhkan, plus catatan singkat untuk orang tua.";
+}
+[14,15,16].forEach(function(i){A[i][4]="c"});
+A.push(
+["DIY cap sayur/buah","seni stempel: cap dari potongan sayur atau buah dicelup cat aman, membentuk gambar sesuai tema","Bagian atas bahan bergambar, tengah 4 langkah, bawah kertas kosong bergaris tepi untuk hasil cap",1,"c"],
+["DIY lukis jari","melukis dengan jari menggunakan cat aman anak membentuk gambar bertema, dengan contoh hasil","Contoh hasil besar, langkah bergambar, ikon celemek dan lap tangan",1,"c"],
+["DIY mahkota hewan","mahkota kertas bertema hewan: pola cetak untuk digunting, diwarnai, ditempel dan dipasang pada pita kertas","Pola besar bagian hewan, strip pita dengan garis gunting, ikon lem dan gunting",1,"c"],
+["DIY burung hantu gulungan tisu","kerajinan hewan dari gulungan tisu dan kertas warna, lengkap pola mata, sayap, dan paruh","Daftar bahan bergambar, pola cetak, 4 langkah bernomor",1,"c"],
+["DIY piring kertas bertema","kerajinan dari piring kertas (wajah hewan, matahari, ikan) dengan potongan kertas tempel","Contoh hasil akhir di tengah, pola bagian di sekelilingnya",1,"c"],
+["DIY kalung/gelang pasta","merangkai pasta berlubang atau sedotan potong pada tali, dengan pola warna sederhana (AB)","Pola warna bergambar, langkah 3, ikon peringatan: awasi anak agar tidak memasukkan ke mulut",1,"c"],
+["DIY adonan main (playdough)","resep adonan main aman dengan takaran, langkah bergambar, dan 4 ide bentuk sesuai tema","Takaran bergambar, langkah nomor, kotak ide bentuk",1,"c"],
+["DIY kartu ucapan/pop-up","kartu ucapan sederhana dengan pola gunting dan tempel bertema, tempat tulisan untuk orang tua","Pola depan dan dalam kartu, garis lipat putus-putus",1,"c"],
+["DIY mainan kardus","mainan sederhana dari kardus bekas (mobil, rumah, kereta) dengan pola, bahan, dan langkah aman","Gambar hasil akhir, daftar bahan, 5 langkah, ikon pendampingan dewasa",1,"c"]
+);
+A.push(
+["Coding: ikuti panah","coding tanpa komputer: robot lucu di kotak grid harus mengikuti deretan panah (atas, bawah, kiri, kanan) untuk sampai ke tujuan, anak menggambar jalurnya","Grid 4x4 besar, robot di awal, makanan atau bintang di tujuan, deretan panah besar di bawah",0,"k"],
+["Coding: urutkan langkah","coding tanpa komputer: 4 gambar kegiatan sehari-hari (bangun, sikat gigi, makan, tidur) diacak untuk diberi nomor urutan, belajar urutan atau algoritma","Empat gambar besar dengan kotak nomor kosong di tiap gambar",0,"k"],
+["Coding: gunting tempel kartu perintah","kartu panah perintah (maju, belok kiri, belok kanan) untuk digunting lalu ditempel berurutan di jalur agar robot sampai tujuan","Kartu panah di bawah dalam kotak gunting, jalur kosong dengan kotak tempel di atas",1,"k"],
+["Coding: pola dan ulangi","coding tanpa komputer: pola warna atau gerakan yang diulang (tepuk, lompat) dilengkapi, belajar perulangan","Deretan kotak pola, kotak kosong besar untuk diwarnai, ikon 'ulangi'",0,"k"],
+["Coding: kode warna jadi gambar","setiap warna punya kode (angka atau simbol): anak mewarnai kotak sesuai kode sehingga muncul gambar pixel sederhana","Kunci kode warna di atas, grid 5x5 atau 6x6 dengan angka kecil di tiap kotak",0,"k"],
+["Coding: cari kesalahan (bug)","coding tanpa komputer: urutan langkah robot yang salah satu langkahnya keliru, anak melingkari kesalahan lalu memperbaiki","Dua jalur: urutan salah dan kotak kosong untuk urutan benar, ikon kutu lucu sebagai bug",0,"k"],
+["Coding: kalau... maka...","kartu sebab-akibat sederhana (kalau hujan, maka bawa payung) untuk dijodohkan, belajar logika jika-maka","Dua kolom gambar kondisi dan gambar tindakan, garis penghubung",0,"k"],
+["Coding: permainan robot lantai","kegiatan fisik: anak jadi robot yang mengikuti kartu perintah di lantai, sertakan kartu panah cetak dan aturan main 3 langkah","Kartu panah besar untuk digunting, aturan main bergambar, ikon pendampingan dewasa",1,"k"]
+);
+var flt="all";
+var sel={},cur=null;
+var $=function(i){return document.getElementById(i)};
+function v(i){return $(i).value.trim()}
+function ids(){return Object.keys(sel).map(Number).sort(function(a,b){return a-b})}
+function render(){
+ var l=ids(),tb=$("tabs");tb.innerHTML="";
+ if(!l.length){$("out").textContent="Pilih minimal satu aktivitas.";return}
+ if(l.indexOf(cur)<0)cur=l[0];
+ l.forEach(function(i){var b=document.createElement("button");b.className="tab"+(i===cur?" on":"");b.textContent=A[i][0];b.onclick=function(){cur=i;render()};tb.appendChild(b)});
+ $("out").textContent=build(cur)}
+var box=$("acts");
+A.forEach(function(a,i){var b=document.createElement("button");b.className="act";b.textContent=a[0];b.onclick=function(){if(sel[i]){delete sel[i];b.classList.remove("on")}else{sel[i]=1;b.classList.add("on")}render()};box.appendChild(b)});
+function cat(i){return A[i][4]==="c"?"c":A[i][4]==="k"?"k":A[i][3]?"g":"w"}
+function applyF(){[].forEach.call(box.children,function(b,i){b.style.display=(flt==="all"||cat(i)===flt)?"":"none"});[].forEach.call($("flt").children,function(b){b.classList.toggle("on",b.getAttribute("data-f")===flt)})}
+[["all","Semua"],["w","Worksheet"],["g","Gunting tempel"],["c","DIY &amp; Craft"],["k","Coding"]].forEach(function(f){var b=document.createElement("button");b.className="tab";b.setAttribute("data-f",f[0]);b.innerHTML=f[1];b.onclick=function(){flt=f[0];applyF()};$("flt").appendChild(b)});
+function setAll(on){[].forEach.call(box.children,function(b,i){if(b.style.display==="none")return;b.classList.toggle("on",on);if(on)sel[i]=1;else delete sel[i]});render()}
+applyF();
+$("all").onclick=function(){setAll(true)};
+$("none").onclick=function(){setAll(false)};
+["subj","topic","grade","diff","n","lang","note","mat"].forEach(function(i){$(i).addEventListener("input",render)});
+function cp(t){
+ var ok=function(){$("msg").textContent="Tersalin! Tempel ke aplikasi AI favoritmu."};
+ var fb=function(){var x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();try{document.execCommand("copy");ok()}catch(e){$("msg").textContent="Gagal menyalin, salin manual dari kotak."}document.body.removeChild(x)};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb()}
+$("copy").onclick=function(){if(ids().length)cp($("out").textContent)};
+$("copyall").onclick=function(){var l=ids();if(!l.length)return;
+ var h="Buat paket worksheet beberapa halaman: satu halaman per aktivitas berikut, urut, dengan gaya konsisten.\n\n";
+ cp(h+l.map(function(i,k){return "=== BAGIAN "+(k+1)+" ===\n"+build(i)}).join("\n\n"))};
+function go(t,url,hint){$("diff").value=t;render();if(!ids().length){$("msg").textContent="Pilih minimal satu aktivitas dulu.";return}
+ var p=$("out").textContent;
+ if(url==="claude")url="https://claude.ai/new?q="+encodeURIComponent(p);
+ window.open(url,"_blank","noopener");cp(p);$("msg").textContent=hint}
+$("goCanva").onclick=function(){go("Canva AI","https://www.canva.com/","Prompt tersalin. Di Canva, klik kolom Canva AI, pilih Design, lalu tempel (Ctrl/Cmd+V).")};
+$("goClaude").onclick=function(){go("Claude","claude","Prompt dikirim ke Claude di tab baru. Jika kolom kosong, tempel promptnya.")};
+$("theme").onclick=function(){var r=document.documentElement,d=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);r.setAttribute("data-theme",d?"light":"dark")};
+render();
+</script>
+</body>
+</html>
