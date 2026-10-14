@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buat Prompt Game master.id</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#3b3560;--line:#7a70b5;--paper:#faf6ff;--card:#fff;--grape:#c9b8f7;--mint:#b8ecd8;--sun:#fdeaa8;--coral:#ffbfcc;--muted:#6f6a94;
+--hd:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--bd:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f2efff;--paper:#14112e;--card:#2a2550;--muted:#b4afdc;--line:#9a8fe0}}
+:root[data-theme="dark"]{--ink:#f2efff;--paper:#14112e;--card:#2a2550;--muted:#b4afdc;--line:#9a8fe0}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--bd)}
+h1,h2,h3{font-family:var(--hd);font-weight:800;line-height:1.05;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+header.hero{padding:44px 0 34px}
+.hero h1{font-size:clamp(40px,9vw,84px);letter-spacing:-.02em;max-width:11ch}
+.hero h1 span{background:var(--sun);color:#3b3560;padding:0 .12em;border:3px solid var(--line);border-radius:12px;display:inline-block;transform:rotate(-2deg);box-shadow:5px 5px 0 var(--line)}
+.hero p{max-width:46ch;color:var(--muted);font-size:18px;margin:20px 0 24px}
+.btn{font:700 16px var(--bd);border:3px solid var(--line);border-radius:12px;padding:12px 20px;background:var(--grape);color:#3b3560;cursor:pointer;box-shadow:4px 4px 0 var(--line);text-decoration:none;display:inline-block}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--line)}
+.btn.alt{background:var(--card);color:var(--ink)}
+.btn.mint{background:var(--mint);color:#3b3560}
+:focus-visible{outline:3px solid var(--coral);outline-offset:3px}
+section{padding:34px 0}
+h2{font-size:clamp(28px,5vw,42px);margin-bottom:18px}
+.builder{display:grid;gap:22px}
+@media(min-width:880px){.builder{grid-template-columns:1fr 1fr;align-items:start}.out{position:sticky;top:16px}}
+.panel{background:var(--card);border:3px solid var(--line);border-radius:18px;padding:20px;box-shadow:6px 6px 0 var(--line)}
+.f{margin-bottom:18px}
+.f>label,.f>b{display:block;font-weight:700;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 14px var(--bd);border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:99px;padding:6px 13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--mint);color:#3b3560;font-weight:700}
+input[type=text],textarea{width:100%;font:400 16px var(--bd);color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+input[type=color]{width:56px;height:40px;border:2px solid var(--line);border-radius:10px;background:var(--paper);padding:2px}
+.chips+input{margin-top:10px}.row{display:flex;gap:12px;align-items:center}
+textarea{resize:vertical;min-height:80px}
+#out{min-height:300px;font-size:15px;line-height:1.5;background:var(--paper)}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.hint{color:var(--muted);font-size:14px;margin:10px 0 0}
+.tpl{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.tpl .panel{box-shadow:4px 4px 0 var(--line);padding:16px}
+.tpl h3{font-size:22px;margin:6px 0}
+.tpl p{margin:0 0 12px;color:var(--muted);font-size:15px}
+.emo{font-size:34px}
+ol.steps{padding:0;margin:0;list-style:none;display:grid;gap:14px;counter-reset:s}
+ol.steps li{counter-increment:s;background:var(--card);border:3px solid var(--line);border-radius:14px;padding:14px 16px 14px 62px;position:relative}
+ol.steps li:before{content:counter(s);position:absolute;left:14px;top:12px;width:36px;height:36px;border-radius:50%;background:var(--coral);color:#3b3560;font:800 18px var(--hd);display:grid;place-items:center;border:3px solid var(--line)}
+details{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700}
+details p{margin:8px 0 0;color:var(--muted)}
+footer{padding:30px 0 40px;color:var(--muted);font-size:14px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:#3b3560;color:#fff;padding:10px 18px;border-radius:99px;font-weight:700;transition:.2s;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>Buat prompt <span>game</span> master.id</h1>
+  <p>Pilih genre, tema, dan fitur. Salin prompt yang sudah tersusun, lalu tempel di AI favoritmu untuk membuat game yang bisa langsung dimainkan.</p>
+  <a class="btn" href="#builder">Mulai rancang prompt</a>
+</header>
+
+<section id="builder">
+  <h2>Prompt Builder</h2>
+  <div class="builder">
+    <div class="panel" id="form">
+      <div class="f"><b>Usia pemain</b><div class="chips" data-k="usia"></div></div>
+      <div class="f"><label for="jud">Judul game</label><input type="text" id="jud" placeholder="Contoh: Petualangan Kiko"></div>
+      <div class="f"><label for="misi">Tujuan game</label><input type="text" id="misi" placeholder="Contoh: kumpulkan 10 bintang tanpa jatuh"></div>
+      <div class="f"><b>Genre</b><div class="chips" data-k="genre"></div></div>
+      <div class="f"><b>Tipe permainan</b><div class="chips" data-k="tipe"></div></div>
+      <div class="f"><b>Karakter</b><div class="chips" data-k="kar"></div><input type="text" id="kar" placeholder="Atau tulis karakter sendiri"></div>
+      <div class="f"><b>Dunia</b><div class="chips" data-k="dunia"></div><input type="text" id="tema" placeholder="Detail dunia (opsional)"></div>
+      <div class="f"><b>Visual</b><div class="chips" data-k="gaya"></div></div>
+      <div class="f"><label for="warna">Warna utama</label><div class="row"><input type="color" id="warna" value="#c9b8f7"><span id="wv">#c9b8f7</span></div></div>
+      <div class="f"><b>Materi pembelajaran</b><div class="chips" data-k="materi"></div><input type="text" id="topik" placeholder="Topik spesifik, contoh: perkalian 1-5"></div>
+      <div class="f"><b>Tingkat kesulitan</b><div class="chips" data-k="level"></div></div>
+      <div class="f"><b>Kontrol</b><div class="chips" data-k="kontrol"></div></div>
+      <div class="f"><b>Fitur tambahan</b><div class="chips" data-k="fitur" data-multi="1"></div></div>
+      <div class="f"><label for="cat">Catatan tambahan</label><textarea id="cat" placeholder="Aturan khusus, musuh, power-up, dan lainnya"></textarea></div>
+    </div>
+    <div class="out">
+      <div class="panel">
+        <label for="out" style="font-weight:700;display:block;margin-bottom:8px">Prompt kamu</label>
+        <textarea id="out" readonly></textarea>
+        <div class="acts">
+          <button class="btn mint" id="copy">Salin prompt</button>
+          <button class="btn alt" id="dl">Unduh prompt (.txt)</button>
+          <button class="btn alt" id="reset">Reset</button>
+        </div>
+        <div class="acts">
+          <a class="btn alt" id="gpt" target="_blank" rel="noopener" href="https://chatgpt.com/">Buka ChatGPT</a>
+          <a class="btn alt" id="cla" target="_blank" rel="noopener" href="https://claude.ai/new">Buka Claude</a>
+          <a class="btn alt" id="gem" target="_blank" rel="noopener" href="https://gemini.google.com/app">Buka Gemini</a>
+        </div>
+        <p class="hint">Tombol buka AI otomatis menyalin prompt dulu. Jika kolom chat masih kosong, tempel dengan tahan lalu pilih Tempel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Preset game populer</h2>
+  <div class="tpl" id="tpl"></div>
+</section>
+
+<section>
+  <h2>Cara pakai</h2>
+  <ol class="steps">
+    <li><b>Pilih kustomisasi.</b> Atur genre, tema, karakter, dan fitur sesukamu.</li>
+    <li><b>Salin prompt.</b> Prompt tersusun otomatis di kolom sebelah kanan.</li>
+    <li><b>Tempel di AI.</b> Buka ChatGPT, Claude, atau Gemini, lalu tempel dan kirim.</li>
+    <li><b>Mainkan game-mu.</b> Simpan kode HTML yang dihasilkan sebagai file .html, lalu buka di browser.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Tanya jawab</h2>
+  <details><summary>Apakah website ini membuat game langsung?</summary><p>Tidak. Website ini hanya menyusun prompt. Game dibuat oleh aplikasi AI yang kamu pilih.</p></details>
+  <details><summary>Bagaimana cara memainkan hasilnya?</summary><p>Salin kode dari AI ke Notepad atau editor teks, simpan dengan nama game.html, lalu buka file itu di browser.</p></details>
+  <details><summary>Bagaimana cara menyimpan game hasil AI?</summary><p>Prompt sudah meminta satu file HTML. Salin kode dari AI, tempel di Notepad atau editor teks, simpan dengan nama game.html, lalu buka di browser. Di HP, salin kodenya ke aplikasi Catatan atau File, lalu ganti ekstensinya menjadi .html.</p></details>
+  <details><summary>Apakah game bisa dimainkan tanpa internet?</summary><p>Bisa. Setelah file game.html tersimpan, game berjalan langsung di browser tanpa internet.</p></details>
+  <details><summary>Hasilnya kurang sesuai, apa yang harus dilakukan?</summary><p>Kirim revisi di chat yang sama, misalnya "buat musuhnya lebih lambat" atau "ganti warna latar jadi biru".</p></details>
+</section>
+<footer>Buat Prompt Game master.id. Dibuat untuk kamu yang ingin bikin game sendiri.</footer>
+</div>
+<div id="toast" role="status">Prompt tersalin</div>
+
+<script>
+var OPT={
+ usia:["Toddler (2-3 th)","TK (4-6 th)","SD (7-12 th)","SMP (13-15 th)","SMA (16-18 th)"],
+ genre:["Platformer","Puzzle","Kuis","Tebak kata","Memory card","Snake","Endless runner","Arcade","Papan"],
+ tipe:["Skor tertinggi","Berbasis level","Waktu terbatas","Santai tanpa kalah","Lawan komputer","2 pemain bergantian"],
+ kar:["Kucing","Anjing","Burung","Kelinci","Robot","Manusia","Dinosaurus","Astronaut"],
+ dunia:["Hutan","Luar angkasa","Laut","Gunung","Kota","Taman bermain","Padang pasir","Negeri permen"],
+ gaya:["Pixel art","Minimalis","Kartun","Pastel lembut","Cat air","Papercraft"],
+ materi:["Tanpa materi","Membaca","Berhitung","Huruf dan angka","Warna dan bentuk","Sains","Bahasa Inggris","IPS","Coding dasar"],
+ level:["Mudah","Sedang","Sulit"],
+ kontrol:["Keyboard","Sentuh (HP)","Keduanya"],
+ fitur:["Skor","Nyawa","Level bertingkat","Musik","Efek suara","Papan skor lokal","Power-up"]
+};
+var GUIDE=["Untuk balita: kontrol cukup satu ketukan, tombol dan gambar sangat besar, tanpa bacaan panjang (pakai suara dan ikon), tanpa game over atau hukuman, beri pujian ceria setiap berhasil.",
+"Untuk anak TK: instruksi sangat singkat dengan ikon, huruf besar dan jelas, kesulitan naik pelan-pelan, tanpa game over yang keras, beri semangat saat salah.",
+"Untuk anak SD: bahasa sederhana, tantangan bertahap, umpan balik jelas saat salah, ada penghargaan bintang atau lencana.",
+"Untuk remaja SMP: tantangan lebih kompleks, target skor yang menantang, tampilan modern, bahasa santai.",
+"Untuk remaja SMA: mekanik lebih dalam dan strategis, kesulitan progresif yang menantang, tampilan modern dan bersih."];
+var DEF={usia:"SD (7-12 th)",genre:"Platformer",tipe:"Skor tertinggi",kar:"Kucing",dunia:"Hutan",gaya:"Pastel lembut",materi:"Tanpa materi",level:"Sedang",kontrol:"Keduanya",fitur:["Skor","Nyawa"]};
+var S=JSON.parse(JSON.stringify(DEF));
+var IN=["jud","misi","kar","tema","topik","cat"];
+var $=function(i){return document.getElementById(i)};
+function build(){
+ document.querySelectorAll(".chips[data-k]").forEach(function(box){
+  var k=box.dataset.k,multi=box.dataset.multi;box.innerHTML="";
+  OPT[k].forEach(function(v){
+   var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=v;
+   var on=multi?S[k].indexOf(v)>-1:S[k]===v;b.setAttribute("aria-pressed",on);
+   b.onclick=function(){
+    if(multi){var i=S[k].indexOf(v);i>-1?S[k].splice(i,1):S[k].push(v)}else{S[k]=v}
+    build();render();
+   };
+   box.appendChild(b);
+  });
+ });
+}
+function render(){
+ var j=$("jud").value.trim(),ms=$("misi").value.trim(),kr=$("kar").value.trim()||S.kar,dt=$("tema").value.trim(),tp=$("topik").value.trim(),n=$("cat").value.trim();
+ var p="Buatkan game "+S.genre.toLowerCase()+(j?' berjudul "'+j+'"':"")+" untuk pemain usia "+S.usia+". Tipe permainan: "+S.tipe.toLowerCase()+".";
+ if(ms)p+=" Tujuan game: "+ms+".";
+ p+="\n\nKarakter utama: "+kr+". Dunia: "+S.dunia.toLowerCase()+(dt?" ("+dt+")":"")+". Gaya visual: "+S.gaya.toLowerCase()+", warna utama "+$("warna").value+". Tingkat kesulitan: "+S.level.toLowerCase()+". Kontrol: "+S.kontrol.toLowerCase()+".";
+ if(S.materi!=="Tanpa materi")p+="\n\nMateri pembelajaran: "+S.materi.toLowerCase()+(tp?" ("+tp+")":"")+". Sisipkan materi ini secara alami ke dalam gameplay dan beri umpan balik edukatif saat pemain benar atau salah.";
+ p+="\n\n"+GUIDE[OPT.usia.indexOf(S.usia)];
+ if(S.fitur.length)p+="\n\nFitur yang harus ada: "+S.fitur.join(", ").toLowerCase()+".";
+ if(n)p+="\n\nCatatan tambahan: "+n;
+ var sfx=S.fitur.indexOf("Efek suara")>-1,mus=S.fitur.indexOf("Musik")>-1;
+ if(sfx||mus){p+="\n\nSUARA (wajib langsung berfungsi sejak percobaan pertama): gunakan Web Audio API tanpa file audio eksternal agar bisa offline. Buat satu AudioContext global dan panggil audioCtx.resume() di dalam handler ketukan pertama pada tombol Mulai, karena browser HP memblokir suara sebelum pemain menyentuh layar. Segera setelah resume, mainkan satu bunyi pendek sebagai pembuka kunci suara (penting untuk iOS Safari)."+(sfx?" Buat efek suara dengan oscillator dan gain envelope untuk: klik tombol, benar, salah, dapat skor, dan game over.":"")+(mus?" Buat musik latar berupa loop sederhana dari urutan nada oscillator dengan volume rendah, dimulai setelah tombol Mulai ditekan.":"")+" Sediakan tombol Suara On/Off yang selalu terlihat. Di layar awal tampilkan pengingat: nyalakan volume HP dan matikan mode senyap. Jangan memulai suara otomatis sebelum ada sentuhan pemain. Pastikan alurnya teruji: setelah Mulai ditekan, suara langsung terdengar tanpa harus menekan tombol lain."}
+ if(S.kontrol!=="Keyboard")p+="\n\nKONTROL SENTUH: gunakan pointer events (pointerdown) dan bukan hanya click atau keyboard, beri touch-action: manipulation pada tombol dan touch-action: none pada area game, ukuran tombol di layar minimal 48px, dan jangan bergantung pada hover. Pastikan tombol Mulai bisa diketuk."
+ p+="\n\nTulis seluruhnya dalam satu file HTML (CSS dan JavaScript di dalamnya) agar bisa langsung dibuka di browser tanpa instalasi. Tampilkan layar awal dengan tombol Mulai, layar akhir dengan tombol Main Lagi, dan petunjuk cara bermain. Pastikan game berjalan lancar dan kodenya rapi.";
+ $("out").value=p;$("wv").textContent=$("warna").value;
+}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(function(){t.classList.remove("on")},1800)}
+function copy(){
+ var v=$("out").value;
+ try{navigator.clipboard.writeText(v).then(function(){toast("Prompt tersalin")},fb)}catch(e){fb()}
+ function fb(){var o=$("out");o.removeAttribute("readonly");o.select();try{document.execCommand("copy");toast("Prompt tersalin")}catch(e){toast("Tahan lalu salin manual")}o.setAttribute("readonly","")}
+}
+IN.concat(["warna"]).forEach(function(i){$(i).addEventListener("input",render)});
+$("copy").onclick=copy;
+$("reset").onclick=function(){S=JSON.parse(JSON.stringify(DEF));IN.forEach(function(i){$(i).value=""});$("warna").value="#c9b8f7";build();render()};
+$("dl").onclick=async function(){
+ var v=$("out").value,nm=($("jud").value.trim()||"prompt-game").replace(/[^a-z0-9]+/gi,"-").toLowerCase()+".txt";
+ try{
+  var d=window.claude&&await claude.use("downloads");
+  if(d){await d.save({filename:nm,data:v});toast("Prompt diunduh");return}
+ }catch(e){if(e&&e.code==="declined")return}
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([v],{type:"text/plain"}));a.download=nm;document.body.appendChild(a);a.click();a.remove();toast("Prompt diunduh");
+};
+$("gpt").addEventListener("click",function(){copy();this.href="https://chatgpt.com/?q="+encodeURIComponent($("out").value)});
+$("cla").addEventListener("click",function(){copy();this.href="https://claude.ai/new?q="+encodeURIComponent($("out").value)});
+$("gem").addEventListener("click",copy);
+var POP=[
+ ["🐦","Burung Loncat","Ketuk untuk terbang melewati celah pipa.","Arcade","Skor tertinggi","Karakter naik setiap diketuk dan jatuh perlahan. Lewati celah di antara pipa; makin lama makin cepat.","SD (7-12 th)"],
+ ["🐍","Ular Klasik","Makan buah, ekor makin panjang.","Snake","Skor tertinggi","Ular bergerak di grid, makan buah untuk bertambah panjang, game selesai jika menabrak dinding atau badan sendiri.","SD (7-12 th)"],
+ ["🧱","Susun Blok","Balok jatuh, susun hingga baris penuh.","Puzzle","Berbasis level","Balok berbentuk beragam jatuh dari atas dan bisa diputar. Baris penuh hilang dan memberi skor; kecepatan naik tiap level.","SMP (13-15 th)"],
+ ["🔢","Gabung Angka","Geser dan gabungkan angka kembar.","Puzzle","Skor tertinggi","Grid 4x4, geser semua kotak; dua angka sama bergabung menjadi dua kali lipat. Target mencapai 2048.","SMP (13-15 th)"],
+ ["🃏","Pasangan Kartu","Cocokkan kartu bergambar.","Memory card","Santai tanpa kalah","Kartu tertutup dibuka dua-dua; pasangan yang cocok tetap terbuka. Hitung jumlah langkah.","TK (4-6 th)"],
+ ["⭕","Tic Tac Toe","Susun tiga tanda segaris.","Papan","Lawan komputer","Papan 3x3, pemain melawan komputer bergantian. Pemenang adalah yang pertama membuat tiga tanda segaris.","SD (7-12 th)"],
+ ["🔨","Pukul Tikus","Pukul tikus yang muncul dari lubang.","Arcade","Waktu terbatas","Hewan muncul acak dari 9 lubang dan harus diketuk sebelum hilang. Waktu 30 detik, kecepatan naik.","TK (4-6 th)"],
+ ["🏓","Pong","Pantulkan bola dengan dayung.","Arcade","2 pemain bergantian","Dua dayung memantulkan bola. Pemain yang gagal menangkis memberi poin ke lawan; bola makin cepat.","SMA (16-18 th)"],
+ ["🔤","Tebak Huruf","Tebak kata sebelum kesempatan habis.","Tebak kata","Berbasis level","Kata rahasia ditampilkan sebagai kotak kosong. Pemain menebak huruf dengan jumlah salah terbatas.","SD (7-12 th)"],
+ ["🏃","Lari Tanpa Henti","Lompat dan menunduk menghindari rintangan.","Endless runner","Skor tertinggi","Karakter berlari otomatis; ketuk untuk melompat dan tahan untuk menunduk. Kecepatan naik seiring jarak.","SD (7-12 th)"]
+];
+var pp=$("tpl");
+POP.forEach(function(x){
+ var d=document.createElement("div");d.className="panel";
+ d.innerHTML='<div class="emo">'+x[0]+'</div><h3>'+x[1]+'</h3><p>'+x[2]+'</p>';
+ var b=document.createElement("button");b.className="btn alt";b.textContent="Pakai preset";
+ b.onclick=function(){S.genre=x[3];S.tipe=x[4];S.usia=x[6];$("jud").value=x[1];$("cat").value=x[5];build();render();$("builder").scrollIntoView();toast("Preset dimuat")};
+ d.appendChild(b);pp.appendChild(d);
+});
+build();render();
+</script>
+</body>
+</html>
